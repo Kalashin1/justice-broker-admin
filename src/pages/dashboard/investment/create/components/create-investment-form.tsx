@@ -34,6 +34,8 @@ const CreateInvestmentForm = () => {
           email: selectedUser?.email,
           name: selectedUser?.name,
         },
+        earnings: 0,
+        capital: parseFloat(selectedPlan.price),
         plan: {
           id: selectedPlan.id,
           title: selectedPlan.title,

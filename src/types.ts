@@ -49,6 +49,7 @@ export type Investment = {
   plan: Pick<Plan, "id" | "title" | "id" | "ROI" | "duration">;
   withdrawalDate: string;
   earnings: number;
+  capital: number;
   status:
     | "CREATED"
     | "PROCESSING"

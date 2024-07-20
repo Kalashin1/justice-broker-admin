@@ -1,10 +1,5 @@
-/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
-// import { useNavigate } from "react-router-dom";
-import { FC, useEffect, useState } from "react";
-// import { SCREENS } from "../../../../navigation/constant";
-import { Investment, Plan } from "../../../../types";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../../../../firebase-setting";
+import { FC } from "react";
+import { Investment } from "../../../../types";
 
 const CurrentEarnings: FC<{
   investments: Investment[];
@@ -12,19 +7,6 @@ const CurrentEarnings: FC<{
   const InvestmentComponent: FC<{ investment: Investment }> = ({
     investment,
   }) => {
-    const [plan, setPlan] = useState<Plan | null>(null);
-
-    useEffect(() => {
-      const set_up = async () => {
-        const docRef = await getDoc(doc(db, "plans", investment.plan.id));
-        if (docRef.exists()) {
-          const _doc = { id: docRef.id, ...docRef.data() } as Plan;
-          setPlan(_doc);
-        }
-      };
-
-      set_up();
-    }, []);
     return (
       <div
         className={`bg-white rounded-lg overflow-hidden shadow-lg transition-transform transform hover:scale-105 relative`}
@@ -40,7 +22,7 @@ const CurrentEarnings: FC<{
             {new Intl.NumberFormat("en-US", {
               currency: "USD",
               style: "currency",
-            }).format(parseFloat(plan?.price!))}
+            }).format(investment.capital ?? 0)}
           </p>
           Profit:{" "}
           <p className="text-4xl font-bold text-gray-800 mb-6">

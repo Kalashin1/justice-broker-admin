@@ -75,18 +75,20 @@ const InvestmentTable: FC<{
     const EditAmountModal = ({
       investmentId,
       currentAmount,
+      _capital,
     }: {
       investmentId: string;
       currentAmount: number;
+      _capital: number;
     }) => {
-      console.log("investment", investmentId);
       const [newAmount, setNewAmount] = useState(currentAmount);
+      const [capital, setCapital] = useState(_capital ?? 0);
 
       const updatePrice = async (id: string) => {
         setIsLoading(true);
-        console.log("new amount", newAmount);
         await updateDoc(doc(db, "investments", id), {
           earnings: newAmount.toString(),
+          capital: capital,
         });
         setShowEditModal(false);
         alert("investment updated");
@@ -108,12 +110,24 @@ const InvestmentTable: FC<{
                   <h1 className="mb-4 text-3xl font-extrabold">
                     Edit Profit Amount
                   </h1>
-                  <input
-                    type="amount"
-                    className="my-2 w-full border py-2 px-6 rounded-xl"
-                    defaultValue={currentAmount}
-                    onChange={(e) => setNewAmount(parseFloat(e.target.value))}
-                  />
+                  <div className="">
+                    <label className="pl-1 my-2">Profit</label>
+                    <input
+                      type="number"
+                      className="my-2 w-full border py-2 px-6 rounded-xl"
+                      defaultValue={currentAmount}
+                      onChange={(e) => setNewAmount(parseFloat(e.target.value))}
+                    />
+                  </div>
+                  <div className="">
+                    <label className="pl-1 my-2">Capital</label>
+                    <input
+                      type="number"
+                      className="my-2 w-full border py-2 px-6 rounded-xl"
+                      defaultValue={capital}
+                      onChange={(e) => setCapital(parseFloat(e.target.value))}
+                    />
+                  </div>
                 </div>
                 <div className="space-y-4">
                   <button
@@ -140,9 +154,7 @@ const InvestmentTable: FC<{
         <TableCell>{investment.user.name}</TableCell>
         <TableCell>{investment.plan.title}</TableCell>
         <TableCell>{price}</TableCell>
-        <TableCell>
-          {new Date(parseFloat(investment.createAt)).toDateString()}
-        </TableCell>
+
         <TableCell>
           {addDaysToDate(
             new Date(parseFloat(investment.createAt)),
@@ -170,6 +182,7 @@ const InvestmentTable: FC<{
               <EditAmountModal
                 currentAmount={investment.earnings}
                 investmentId={investment.id}
+                _capital={investment.capital}
               />
             )}
           </TableCell>
@@ -188,7 +201,6 @@ const InvestmentTable: FC<{
             <TableHead>User</TableHead>
             <TableHead>Plan</TableHead>
             <TableHead>ROI</TableHead>
-            <TableHead>Start Date</TableHead>
             <TableHead>End Date</TableHead>
             {user?.isAdmin && <TableHead>&nbsp;</TableHead>}
           </TableRow>
