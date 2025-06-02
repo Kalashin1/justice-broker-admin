@@ -17,7 +17,7 @@ import { SCREENS } from "../../../../navigation/constant";
 import { LoaderContext } from "../../../../App";
 
 type WithdrawalMethod = {
-  label: "BTC" | string;
+  label: string;
   value: string;
 };
 
@@ -29,8 +29,10 @@ const WithdrawalForm = () => {
 
   const [selectedInvestment, setSelectedInvestment] =
     useState<Investment | null>(null);
-  const [withdrawalMethod, setSelectedWithdrawalMethod] =
-    useState<WithdrawalMethod | null>(null);
+
+
+  const [selectedWithdrawalMethod, updateSelectedWithdawalMethod] = useState("")
+  
   const [investments, setInvestments] = useState<Investment[]>([]);
   const [withdrawalMethods, setWithdrawalMethods] = useState<
     WithdrawalMethod[]
@@ -44,22 +46,15 @@ const WithdrawalForm = () => {
 
       if (docRef.exists()) {
         const _user = { ...docRef.data(), id: docRef.id } as User;
-        if (
-          _user.bank === null ||
-          _user?.bank === undefined ||
-          !_user.btcAddress
-        ) {
-          alert("You have to complete your profile information to withdraw");
-          navigate(SCREENS.PROFILE);
-        }
+
         setUser(_user);
         const bank: WithdrawalMethod = {
-          label: `${_user.bank.bankName} - ${_user.bank.accountNumber}`,
-          value: _user.bank.accountNumber,
+          label: "BANK",
+          value: "BANK",
         };
         const btc: WithdrawalMethod = {
           label: "BTC",
-          value: _user.btcAddress,
+          value: "BANK",
         };
         setWithdrawalMethods([bank, btc]);
         const q = query(
@@ -106,7 +101,7 @@ const WithdrawalForm = () => {
         amount: amount,
         status: "PENDING",
         user: { id: user?.id, name: user?.name, email: user?.email },
-        method: withdrawalMethod,
+        method: {},
       });
       alert("withdrawal Request Logged, awaiting approval");
       navigate(SCREENS.DASHBOARD);
@@ -146,11 +141,39 @@ const WithdrawalForm = () => {
         <div className="w-1/2">
           <Select
             options={withdrawalMethods}
-            onChange={(v) => setSelectedWithdrawalMethod(v)}
-            placeholder="select Your withdrawal method"
+            onChange={(v) => updateSelectedWithdawalMethod(v?.value!)}
+            placeholder="Select Your withdrawal method"
           />
         </div>
       </div>
+
+      <div className="flex py-1 space-x-2">
+        {selectedWithdrawalMethod === "BANK" && (
+          <div className="w-1/2">
+            <input
+              type="text"
+              name="bank"
+              id=""
+              placeholder="Enter Bank Account orBlockchain Protocol"
+              className="border p-2 w-full mt-3"
+            />
+          </div>
+        )}
+        {selectedWithdrawalMethod === "BANK" && (
+          <div className="w-1/2">
+            <input
+              type="text"
+              name="account"
+              id=""
+              placeholder="Enter Account or BTC address"
+              className="border p-2 w-full mt-3"
+            />
+          </div>
+        )}
+      </div>
+
+     
+
       <input
         type="number"
         name="amount"
@@ -165,7 +188,7 @@ const WithdrawalForm = () => {
         disabled={isLoading}
         className="w-full mt-6 bg-blue-600 hover:bg-blue-500 text-white font-semibold p-3"
       />
-  </form>
+    </form>
   );
 };
 
