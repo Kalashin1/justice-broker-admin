@@ -10,4 +10,6 @@ export enum SCREENS {
   PLANS = "/plans",
   CREATE_PLAN = "/create-plan",
   USERS_TABLE = "/users",
+  FORGOT_PASSORD = '/forgot-password',
+  INVESTMENT_DETAIL = '/investment/:id'
 }

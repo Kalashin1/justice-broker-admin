@@ -96,7 +96,6 @@ const Home = () => {
     set_up(localStorage.getItem("user_id")!);
   }, [navigate]);
 
-  console.log("user", user);
   return (
     <Layout>
       <section className="bg-gray-100 p-6">

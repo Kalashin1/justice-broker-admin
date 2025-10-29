@@ -8,15 +8,18 @@ import {
   TableHeader,
   TableRow,
 } from "../../../../components/ui/table";
-import { addDaysToDate, Investment, Plan, User } from "../../../../types";
+import { Investment, Plan, User } from "../../../../types";
 import { getDoc, doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../../../firebase-setting";
+import { Link } from "react-router-dom";
 
 const InvestmentTable: FC<{
   investments: Investment[];
   getInvestments: (...args: unknown[]) => void;
 }> = ({ investments, getInvestments }) => {
   const [user, setUser] = useState<User | null>(null);
+
+  console.log("investments", investments);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -49,7 +52,7 @@ const InvestmentTable: FC<{
     investment: Investment;
     index: number;
   }) => {
-    const [plan, setPlan] = useState<Plan | null>(null);
+    const [, setPlan] = useState<Plan | null>(null);
     const [price, setPrice] = useState("");
 
     useEffect(() => {
@@ -149,18 +152,27 @@ const InvestmentTable: FC<{
 
     return (
       <TableRow className={`bg-gray-50`} key={index}>
-        <TableCell className="font-medium">{index + 1}</TableCell>
-        <TableCell>{investment.status}</TableCell>
-        <TableCell>{investment.user.name}</TableCell>
-        <TableCell>{investment.plan.title}</TableCell>
-        <TableCell>{price}</TableCell>
-
-        <TableCell>
-          {addDaysToDate(
-            new Date(parseFloat(investment.createAt)),
-            plan?.duration!
-          ).toDateString()}
+        <TableCell className="font-medium">
+          <Link to={`/investment/${investment.id}`}>{index + 1}</Link>
         </TableCell>
+        <TableCell>
+          <Link to={`/investment/${investment.id}`}>{investment.status}</Link>
+        </TableCell>
+        <TableCell>
+          <Link to={`/investment/${investment.id}`}>
+            {investment.user.name}
+          </Link>
+        </TableCell>
+        <TableCell>
+          <Link to={`/investment/${investment.id}`}>
+            {investment.plan.title}
+          </Link>
+        </TableCell>
+        <TableCell>
+          <Link to={`/investment/${investment.id}`}>{price}</Link>
+        </TableCell>
+
+        <TableCell>{investment.capital}</TableCell>
         {user?.isAdmin && (
           <TableCell className="grid grid-cols-2">
             <button
@@ -200,8 +212,8 @@ const InvestmentTable: FC<{
             <TableHead>Status</TableHead>
             <TableHead>User</TableHead>
             <TableHead>Plan</TableHead>
-            <TableHead>ROI</TableHead>
-            <TableHead>End Date</TableHead>
+            <TableHead>profit</TableHead>
+            <TableHead>Capital</TableHead>
             {user?.isAdmin && <TableHead>&nbsp;</TableHead>}
           </TableRow>
         </TableHeader>

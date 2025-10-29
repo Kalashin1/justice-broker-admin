@@ -11,6 +11,8 @@ import ProfilePage from "../pages/dashboard/profile";
 import Plans from "../pages/dashboard/plans";
 import CreatePlan from "../pages/dashboard/plans/create";
 import Users from "../pages/dashboard/users";
+import ForgotPassword from "../pages/auth/forgot-password";
+import InvestmentDetail from "../pages/dashboard/investment/details";
 
 const router = createBrowserRouter([
   {
@@ -61,6 +63,14 @@ const router = createBrowserRouter([
     path: SCREENS.USERS_TABLE,
     element: <Users />,
   },
+  {
+    path: SCREENS.FORGOT_PASSORD,
+    element: <ForgotPassword />,
+  },
+  {
+    path: SCREENS.INVESTMENT_DETAIL,
+    element: <InvestmentDetail />
+  }
 ]);
 
 export default router;

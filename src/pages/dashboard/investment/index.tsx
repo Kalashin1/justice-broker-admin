@@ -46,7 +46,7 @@ const Investments = () => {
 
   return (
     <Layout>
-      <div className="px-12 py-8">
+      <div className="lg:px-12 p-4 lg:py-8">
         <h3 className="text-2xl font-bold">Your Investments</h3>
       </div>
       <section className="px-12 py-6 h-screen">
